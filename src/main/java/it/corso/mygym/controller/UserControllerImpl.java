@@ -49,8 +49,9 @@ public class UserControllerImpl implements UserController {
     }
 
     @ExceptionHandler({UserNotFoundException.class})
-    private ResponseEntity<?> preconditionFailed(RuntimeException e){
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    private ResponseEntity<?> userNotFound(RuntimeException e){
 
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.PRECONDITION_FAILED);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
