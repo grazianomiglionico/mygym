@@ -31,12 +31,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return repo.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Optional<User> optionalUser = repo.findById(id);
+
+        if(optionalUser.isPresent()){
+            return optionalUser.get();
+        } else throw new ResourceNotFoundException();
     }
 
     @Override
     public List<User> findAll(boolean includeInactiveFlag) {
-        return null;
+        if(includeInactiveFlag)
+            return repo.findAll();
+        else
+            return repo.findByActiveFlagTrue();
     }
 
     @Override
