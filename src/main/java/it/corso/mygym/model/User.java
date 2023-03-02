@@ -40,7 +40,7 @@ public class User implements Serializable {
     private String email;
 
     @NotNull
-    private boolean activeFlag;
+    private boolean activeFlag = true;
 
     @OneToMany(mappedBy = "user")
     private List<Subscription> subscriptions;

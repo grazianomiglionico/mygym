@@ -3,6 +3,7 @@ package it.corso.mygym.service;
 import it.corso.mygym.dao.UserRepository;
 import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -22,8 +23,10 @@ public class UserServiceImpl implements UserService {
     private UserRepository repo;
 
     @Override
-    public User save(User user) {
-        return repo.save(user);
+    public User save(UserDto userDto) {
+        ModelMapper modelMapper = new ModelMapper();
+
+        return repo.save(modelMapper.map(userDto, User.class));
     }
 
     @Override
