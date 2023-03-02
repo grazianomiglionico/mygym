@@ -3,6 +3,7 @@ package it.corso.mygym.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import it.corso.mygym.model.enums.Type;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -54,4 +55,7 @@ public class Subscription implements Serializable {
     @JoinColumn(name = "gym_id")
     @JsonBackReference() // to resolve JSON infinite recursion problem
     private Gym gym;
+
+    @Column(name = "type")
+    private Type type;
 }
