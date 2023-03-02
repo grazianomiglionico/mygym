@@ -2,12 +2,10 @@ package it.corso.mygym.controller;
 
 import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
+import it.corso.mygym.model.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -21,4 +19,8 @@ public interface UserController {
 
     )
     ResponseEntity<User> save(@Valid @RequestBody UserDto userDto);
+
+    @PutMapping("/{id}")
+    ResponseEntity<User> update(@PathVariable(value = "id") Long id,
+                                @Valid @RequestBody UserDto userDto) throws UserNotFoundException;
 }

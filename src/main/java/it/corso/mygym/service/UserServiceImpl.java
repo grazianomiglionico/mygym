@@ -1,8 +1,10 @@
 package it.corso.mygym.service;
 
+import it.corso.mygym.Constants;
 import it.corso.mygym.dao.UserRepository;
 import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
+import it.corso.mygym.model.exception.UserNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -47,7 +49,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(Long id, UserDto userDto) {
+    public User update(Long id, UserDto userDto)  {
+        validateIdExists(id); // may throw the UserNotFoundException
+
+        User userEntity = repo.findById(id).get();
+        copyNonNullProperties(userDto, userEntity);
+
+        return repo.saveAndFlush(userEntity);
+
+        /*
         Optional<User> userOld = repo.findById(id);
         userDto.setId(id);
 
@@ -56,7 +66,7 @@ public class UserServiceImpl implements UserService {
             userDto.setId(id);
 
             return repo.saveAndFlush(userOld.get());
-        } else throw new ResourceNotFoundException();
+        } else throw new ResourceNotFoundException();*/
     }
 
     @Override
@@ -75,7 +85,7 @@ public class UserServiceImpl implements UserService {
         } else throw new ResourceNotFoundException();
     }
 
-    public static void copyNonNullProperties(Object src, Object target) {
+    static void copyNonNullProperties(Object src, Object target) {
         BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
     }
 
@@ -90,5 +100,9 @@ public class UserServiceImpl implements UserService {
         }
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
+    }
+
+    private void validateIdExists(final Long id) {
+        if (repo.findById(id).isEmpty()) throw new UserNotFoundException(Constants.USER_NOT_FOUND_EXCEPTION, id);
     }
 }
