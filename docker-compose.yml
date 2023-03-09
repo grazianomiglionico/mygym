@@ -1,0 +1,32 @@
+version: '3.8' # specify docker-compose version
+
+# Define the services/containers to be run
+services:
+  
+  ### DB service ###
+
+  db:
+    image: "mariadb:10.6"
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_DATABASE=mygym
+    volumes:
+      - db:/var/lib/mysql
+
+  ### BACKEND service ###
+
+  backend:
+    container_name: mygym-be
+    build: . # specify the directory of the Dockerfile
+    ports:
+      - 9001:9001 # specify ports forewarding
+    restart: always
+    depends_on: # used to control startup and shutdown order in Compose
+      - db
+
+
+volumes:
+  db:
