@@ -1,5 +1,6 @@
 package it.corso.mygym.controller;
 
+import it.corso.mygym.dto.ApiResponse;
 import it.corso.mygym.dto.UserDto;
 import it.corso.mygym.dto.request.UserRequest;
 import it.corso.mygym.exception.UserNotFoundException;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
@@ -19,40 +22,32 @@ public class UserControllerImpl implements UserController {
     private final UserService userService;
 
     @Override
-    public ResponseEntity<UserDto> save(@Valid @RequestBody UserRequest userRequest) {
-        UserDto userSaved = userService.save(userRequest);
-
-        // TODO: create UserSuccessResponse
-        // TODO: add metadata
-        // TODO: add status
-
-        // TODO: return complete response
-        return new ResponseEntity<>(userSaved, HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<UserDto>> save(@Valid @RequestBody UserRequest userRequest) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("Utente creato con successo", userService.save(userRequest)));
     }
 
     @Override
-    public ResponseEntity<UserDto> update(@PathVariable(value = "id") Long id, @Valid @RequestBody UserRequest userRequest) throws UserNotFoundException {
-        UserDto userUpdated = userService.update(id, userRequest);
-
-        return ResponseEntity.ok(userUpdated);
+    public ResponseEntity<ApiResponse<UserDto>> update(@PathVariable(value = "id") Long id, @Valid @RequestBody UserRequest userRequest) throws UserNotFoundException {
+        return ResponseEntity.ok(ApiResponse.ok(
+                "Utente aggiornato con successo",
+                userService.update(id, userRequest)));
     }
 
     @Override
-    public ResponseEntity<UserDto> getAll() {
-        return userService.findAll(false).stream()
-                .map(ResponseEntity::ok)
-                .findFirst()
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ApiResponse<List<UserDto>>> getAll() {
+        return ResponseEntity.ok(ApiResponse.ok(userService.findAll(false)));
     }
 
     @Override
-    public ResponseEntity<UserDto> getById(Long id) {
-        return ResponseEntity.ok(userService.findById(id));
+    public ResponseEntity<ApiResponse<UserDto>> getById(Long id) {
+        return ResponseEntity.ok(ApiResponse.ok(userService.findById(id)));
     }
 
     @Override
-    public ResponseEntity<UserDto> deleteById(Long id) {
-        return ResponseEntity.ok(userService.deleteById(id));
+    public ResponseEntity<ApiResponse<UserDto>> deleteById(Long id) {
+        return ResponseEntity.ok(ApiResponse.ok(userService.deleteById(id)));
     }
 
     @ExceptionHandler({UserNotFoundException.class})

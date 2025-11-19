@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 @Tag(name = "Users")
 @RequestMapping("/users")
 public interface UserController {
@@ -34,7 +36,7 @@ public interface UserController {
             @ApiResponse(responseCode = "500", description = "An unexpected error has occurred. User record was not created.")})
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<UserDto> save(@Valid @RequestBody UserRequest userRequest);
+    ResponseEntity<it.corso.mygym.dto.ApiResponse<UserDto>> save(@Valid @RequestBody UserRequest userRequest);
 
 
     @Operation(
@@ -49,7 +51,7 @@ public interface UserController {
             @ApiResponse(responseCode = "412", description = "User record record update failed."),
             @ApiResponse(responseCode = "500", description = "An unexpected error has occurred. User record was not updated.")})
     @PutMapping("/{id}")
-    ResponseEntity<UserDto> update(@PathVariable(value = "id") Long id,
+    ResponseEntity<it.corso.mygym.dto.ApiResponse<UserDto>> update(@PathVariable(value = "id") Long id,
                                 @Valid @RequestBody UserRequest userRequest) throws UserNotFoundException;
 
     @Operation(
@@ -65,7 +67,7 @@ public interface UserController {
             @ApiResponse(responseCode = "500", description = "An unexpected error has occurred. Users were not retrieved.")
     })
     @GetMapping()
-    ResponseEntity<UserDto> getAll();
+    ResponseEntity<it.corso.mygym.dto.ApiResponse<List<UserDto>>> getAll();
 
     @Operation(
             summary = "Get a user by id",
@@ -80,7 +82,7 @@ public interface UserController {
             @ApiResponse(responseCode = "500", description = "An unexpected error has occurred. User was not retrieved.")
     })
     @GetMapping("/{id}")
-    ResponseEntity<UserDto> getById(@PathVariable(value = "id") Long id);
+    ResponseEntity<it.corso.mygym.dto.ApiResponse<UserDto>> getById(@PathVariable(value = "id") Long id);
 
     @Operation(
             summary = "Delete a user by id",
@@ -95,5 +97,5 @@ public interface UserController {
             @ApiResponse(responseCode = "500", description = "An unexpected error has occurred. User was not deleted.")
     })
     @DeleteMapping("/{id}")
-    ResponseEntity<UserDto> deleteById(@PathVariable(value = "id") Long id);
+    ResponseEntity<it.corso.mygym.dto.ApiResponse<UserDto>> deleteById(@PathVariable(value = "id") Long id);
 }
