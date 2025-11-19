@@ -4,21 +4,19 @@ import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
 import it.corso.mygym.model.exception.UserNotFoundException;
 import it.corso.mygym.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserControllerImpl implements UserController {
 
-    private UserService userService;
-
-    @Autowired
-    public UserControllerImpl(final UserService userService) {this.userService = userService;}
+    private final UserService userService;
 
     @Override
     @PostMapping(

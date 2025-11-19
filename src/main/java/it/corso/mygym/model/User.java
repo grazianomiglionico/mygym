@@ -2,6 +2,7 @@ package it.corso.mygym.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "user")
 @JsonInclude(JsonInclude.Include.NON_NULL) //The @JsonInclude annotation provides hints about what content to serialize. In this example, all non-null values are serialized

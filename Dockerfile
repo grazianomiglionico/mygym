@@ -1,5 +1,5 @@
-FROM openjdk:17-oracle
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
+FROM eclipse-temurin:25-jdk
+WORKDIR /app
+COPY target/*.jar app.jar
 EXPOSE 9001
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

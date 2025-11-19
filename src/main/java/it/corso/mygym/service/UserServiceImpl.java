@@ -5,11 +5,11 @@ import it.corso.mygym.dao.UserRepository;
 import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
 import it.corso.mygym.model.exception.UserNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository repo;
+    private final UserRepository repo;
 
     @Override
     public User save(UserDto userDto) {
