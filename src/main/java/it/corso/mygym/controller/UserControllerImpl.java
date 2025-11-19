@@ -1,6 +1,5 @@
 package it.corso.mygym.controller;
 
-import it.corso.mygym.Constants;
 import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
 import it.corso.mygym.model.exception.UserNotFoundException;
@@ -10,11 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
-import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
