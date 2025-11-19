@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
+import it.corso.mygym.model.dto.UserRequest;
 import it.corso.mygym.model.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public interface UserController {
             @ApiResponse(responseCode = "500", description = "An unexpected error has occurred. User record was not created.")})
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<User> save(@Valid @RequestBody UserDto userDto);
+    ResponseEntity<UserDto> save(@Valid @RequestBody UserRequest userRequest);
 
 
     @Operation(
@@ -49,6 +50,6 @@ public interface UserController {
             @ApiResponse(responseCode = "412", description = "User record record update failed."),
             @ApiResponse(responseCode = "500", description = "An unexpected error has occurred. User record was not updated.")})
     @PutMapping("/{id}")
-    ResponseEntity<User> update(@PathVariable(value = "id") Long id,
-                                @Valid @RequestBody UserDto userDto) throws UserNotFoundException;
+    ResponseEntity<UserDto> update(@PathVariable(value = "id") Long id,
+                                @Valid @RequestBody UserRequest userRequest) throws UserNotFoundException;
 }

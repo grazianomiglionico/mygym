@@ -1,7 +1,7 @@
 package it.corso.mygym.controller;
 
-import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
+import it.corso.mygym.model.dto.UserRequest;
 import it.corso.mygym.model.exception.UserNotFoundException;
 import it.corso.mygym.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,8 @@ public class UserControllerImpl implements UserController {
     @PostMapping(
 
     )
-    public ResponseEntity<User> save(@Valid @RequestBody UserDto userDto) {
-        User userSaved = userService.save(userDto);
+    public ResponseEntity<UserDto> save(@Valid @RequestBody UserRequest userRequest) {
+        UserDto userSaved = userService.save(userRequest);
 
         // TODO: create UserSuccessResponse
         // TODO: add metadata
@@ -35,8 +35,8 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable(value = "id") Long id, @Valid @RequestBody UserDto userDto) throws UserNotFoundException {
-        User userUpdated = userService.update(id, userDto);
+    public ResponseEntity<UserDto> update(@PathVariable(value = "id") Long id, @Valid @RequestBody UserRequest userRequest) throws UserNotFoundException {
+        UserDto userUpdated = userService.update(id, userRequest);
 
         return ResponseEntity.ok(userUpdated);
     }

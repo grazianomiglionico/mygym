@@ -2,76 +2,79 @@ package it.corso.mygym.service;
 
 import it.corso.mygym.Constants;
 import it.corso.mygym.dao.UserRepository;
+import it.corso.mygym.mapper.UserMapper;
 import it.corso.mygym.model.User;
 import it.corso.mygym.model.dto.UserDto;
+import it.corso.mygym.model.dto.UserRequest;
 import it.corso.mygym.model.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repo;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
+    @Transactional
     @Override
-    public User save(UserDto userDto) {
-        ModelMapper modelMapper = new ModelMapper();
+    public UserDto save(UserRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email già esistente");
+        }
 
-        return repo.save(modelMapper.map(userDto, User.class));
+        User user = User.builder()
+                .name(request.getName())
+                .surname(request.getSurname())
+                .email(request.getEmail())
+                .activeFlag(true)
+                .build();
+
+        return userMapper.toDto(
+                userRepository.save(user));
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public User findById(Long id) {
-        Optional<User> optionalUser = repo.findById(id);
+    public UserDto findById(Long id) {
+        User user = userRepository.findById(id)
+                .filter(User::isActiveFlag)
+                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato o inattivo"));
 
-        if(optionalUser.isPresent()){
-            return optionalUser.get();
-        } else throw new ResourceNotFoundException();
+        return userMapper.toDto(user);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<User> findAll(boolean includeInactiveFlag) {
-        if(includeInactiveFlag)
-            return repo.findAll();
-        else
-            return repo.findByActiveFlagTrue();
+    public List<UserDto> findAll(boolean includeInactiveFlag) {
+        return (includeInactiveFlag ? userRepository.findAll() : userRepository.findByActiveFlagTrue())
+                .stream()
+                .map(userMapper::toDto)
+                .toList();
     }
 
+    @Transactional
     @Override
-    public User update(Long id, UserDto userDto)  {
-        validateIdExists(id); // may throw the UserNotFoundException
+    public UserDto update(Long id, UserRequest request)  {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND_EXCEPTION, id));
 
-        User userEntity = repo.findById(id).get();
-        copyNonNullProperties(userDto, userEntity);
+        userMapper.updateUserFromRequest(request, user);
 
-        return repo.saveAndFlush(userEntity);
-
-        /*
-        Optional<User> userOld = repo.findById(id);
-        userDto.setId(id);
-
-        if(userOld.isPresent()){
-            copyNonNullProperties(userDto, userOld.get());
-            userDto.setId(id);
-
-            return repo.saveAndFlush(userOld.get());
-        } else throw new ResourceNotFoundException();*/
+        return userMapper.toDto(
+                userRepository.saveAndFlush(user));
     }
 
+    @Transactional
     @Override
-    public User deleteById(Long id) {
-        Optional<User> optionalUser = repo.findById(id);
+    public UserDto deleteById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
 
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
@@ -81,28 +84,9 @@ public class UserServiceImpl implements UserService {
 
             // soft-delete
             user.setActiveFlag(false);
-            return repo.save(user);
+            return userMapper.toDto(
+                    userRepository.save(user));
+
         } else throw new ResourceNotFoundException();
-    }
-
-    static void copyNonNullProperties(Object src, Object target) {
-        BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
-    }
-
-    public static String[] getNullPropertyNames(Object source) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-        Set<String> emptyNames = new HashSet<String>();
-        for (java.beans.PropertyDescriptor pd : pds) {
-            Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
-        }
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
-    }
-
-    private void validateIdExists(final Long id) {
-        if (repo.findById(id).isEmpty()) throw new UserNotFoundException(Constants.USER_NOT_FOUND_EXCEPTION, id);
     }
 }

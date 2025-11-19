@@ -1,21 +1,9 @@
 package it.corso.mygym.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.io.Serializable;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserDto {
-
-    private Long id;
-
-    private String name;
-
-    private String surname;
-
-    private String email;
+/**
+ * DTO for {@link it.corso.mygym.model.User}
+ */
+public record UserDto(Long id, String name, String surname, String email, boolean activeFlag) implements Serializable {
 }
