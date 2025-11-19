@@ -49,11 +49,4 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<ApiResponse<UserDto>> deleteById(Long id) {
         return ResponseEntity.ok(ApiResponse.ok(userService.deleteById(id)));
     }
-
-    @ExceptionHandler({UserNotFoundException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    private ResponseEntity<?> userNotFound(RuntimeException e){
-
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
 }
