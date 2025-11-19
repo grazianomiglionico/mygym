@@ -1,4 +1,4 @@
-package it.corso.mygym.dao;
+package it.corso.mygym.repository;
 
 import it.corso.mygym.model.Gym;
 import org.springframework.data.jpa.repository.JpaRepository;

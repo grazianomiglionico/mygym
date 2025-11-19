@@ -1,7 +1,7 @@
 package it.corso.mygym.service;
 
-import it.corso.mygym.model.dto.UserDto;
-import it.corso.mygym.model.dto.UserRequest;
+import it.corso.mygym.dto.UserDto;
+import it.corso.mygym.dto.request.UserRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

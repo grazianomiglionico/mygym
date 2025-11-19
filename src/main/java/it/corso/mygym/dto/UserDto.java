@@ -1,4 +1,4 @@
-package it.corso.mygym.model.dto;
+package it.corso.mygym.dto;
 
 import java.io.Serializable;
 

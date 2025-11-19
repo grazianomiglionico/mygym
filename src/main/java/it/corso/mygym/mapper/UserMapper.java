@@ -1,8 +1,8 @@
 package it.corso.mygym.mapper;
 
 import it.corso.mygym.model.User;
-import it.corso.mygym.model.dto.UserDto;
-import it.corso.mygym.model.dto.UserRequest;
+import it.corso.mygym.dto.UserDto;
+import it.corso.mygym.dto.request.UserRequest;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)

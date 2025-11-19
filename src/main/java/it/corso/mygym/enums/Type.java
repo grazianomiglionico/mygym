@@ -1,4 +1,4 @@
-package it.corso.mygym.model.enums;
+package it.corso.mygym.enums;
 
 public enum Type {
 

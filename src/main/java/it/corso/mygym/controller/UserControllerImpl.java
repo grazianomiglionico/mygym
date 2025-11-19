@@ -1,8 +1,8 @@
 package it.corso.mygym.controller;
 
-import it.corso.mygym.model.dto.UserDto;
-import it.corso.mygym.model.dto.UserRequest;
-import it.corso.mygym.model.exception.UserNotFoundException;
+import it.corso.mygym.dto.UserDto;
+import it.corso.mygym.dto.request.UserRequest;
+import it.corso.mygym.exception.UserNotFoundException;
 import it.corso.mygym.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

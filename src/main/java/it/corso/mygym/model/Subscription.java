@@ -3,12 +3,12 @@ package it.corso.mygym.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import it.corso.mygym.model.enums.Type;
+import it.corso.mygym.enums.Type;
 import lombok.*;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
+
 import java.time.LocalDate;
 
 @Builder

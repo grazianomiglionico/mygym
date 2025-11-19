@@ -1,12 +1,12 @@
 package it.corso.mygym.service;
 
 import it.corso.mygym.Constants;
-import it.corso.mygym.dao.UserRepository;
+import it.corso.mygym.repository.UserRepository;
 import it.corso.mygym.mapper.UserMapper;
 import it.corso.mygym.model.User;
-import it.corso.mygym.model.dto.UserDto;
-import it.corso.mygym.model.dto.UserRequest;
-import it.corso.mygym.model.exception.UserNotFoundException;
+import it.corso.mygym.dto.UserDto;
+import it.corso.mygym.dto.request.UserRequest;
+import it.corso.mygym.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
