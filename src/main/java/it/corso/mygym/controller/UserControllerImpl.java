@@ -19,9 +19,6 @@ public class UserControllerImpl implements UserController {
     private final UserService userService;
 
     @Override
-    @PostMapping(
-
-    )
     public ResponseEntity<UserDto> save(@Valid @RequestBody UserRequest userRequest) {
         UserDto userSaved = userService.save(userRequest);
 
@@ -34,11 +31,28 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @PutMapping("/{id}")
     public ResponseEntity<UserDto> update(@PathVariable(value = "id") Long id, @Valid @RequestBody UserRequest userRequest) throws UserNotFoundException {
         UserDto userUpdated = userService.update(id, userRequest);
 
         return ResponseEntity.ok(userUpdated);
+    }
+
+    @Override
+    public ResponseEntity<UserDto> getAll() {
+        return userService.findAll(false).stream()
+                .map(ResponseEntity::ok)
+                .findFirst()
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Override
+    public ResponseEntity<UserDto> getById(Long id) {
+        return ResponseEntity.ok(userService.findById(id));
+    }
+
+    @Override
+    public ResponseEntity<UserDto> deleteById(Long id) {
+        return ResponseEntity.ok(userService.deleteById(id));
     }
 
     @ExceptionHandler({UserNotFoundException.class})
